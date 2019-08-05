@@ -39,9 +39,9 @@ int main() {
    * TODO: Initialize the pid variable.
    */
   // P, I, D coefficients
-  double p = 4.0;
-  double i = 3.0;
-  double d = 4.0;
+  double p = 0.32;
+  double i = 0.0;
+  double d = 5.5;
   // initilize the PID controller;
   pid.Init(p, i, d);
 
@@ -90,8 +90,8 @@ int main() {
 
           // determine the throttle_value based on cte using speed_pid controller
           speed_pid.UpdateError(cte);
-          double total_error_speed = pid.TotalError();
-          double coeff_throttle = 3.0;
+          double total_error_speed = speed_pid.TotalError();
+          double coeff_throttle = 1.0;
           throttle_value = 0.7 * exp(- coeff_throttle * fabs(total_error_speed));
 
           std::cout << "Total Error: " << total_error;
