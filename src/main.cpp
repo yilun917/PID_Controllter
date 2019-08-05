@@ -39,9 +39,9 @@ int main() {
    * TODO: Initialize the pid variable.
    */
   // P, I, D coefficients
-  double p = 0.32;
+  double p = 0.38;
   double i = 0.0;
-  double d = 5.5;
+  double d = 6.5;
   // initilize the PID controller;
   pid.Init(p, i, d);
 
