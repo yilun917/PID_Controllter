@@ -8,6 +8,7 @@
 // for convenience
 using nlohmann::json;
 using std::string;
+using std::exp;
 
 // For converting back and forth between radians and degrees.
 constexpr double pi() { return M_PI; }
@@ -37,8 +38,21 @@ int main() {
   /**
    * TODO: Initialize the pid variable.
    */
+  // P, I, D coefficients
+  double p = 4.0;
+  double i = 3.0;
+  double d = 4.0;
+  // initilize the PID controller;
+  pid.Init(p, i, d);
 
-  h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
+  // pid controller for the speed
+  PID speed_pid;
+  double s_p = 1.5;
+  double s_i = 0.0;
+  double s_d = 0.0;  
+  speed_pid.Init(s_p, s_i, s_d);
+
+  h.onMessage([&pid, &speed_pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
                      uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -57,20 +71,37 @@ int main() {
           double speed = std::stod(j[1]["speed"].get<string>());
           double angle = std::stod(j[1]["steering_angle"].get<string>());
           double steer_value;
+          double throttle_value;
           /**
            * TODO: Calculate steering value here, remember the steering value is
            *   [-1, 1].
            * NOTE: Feel free to play around with the throttle and speed.
            *   Maybe use another PID controller to control the speed!
            */
+          // calculate the error
+          pid.UpdateError(cte);
+          double total_error = pid.TotalError();
+          // normalize the steering value based on totalError
+          double coeff_steering = 0.2; 
+          steer_value = -(1 - exp(-coeff_steering * fabs(total_error)));
+          // determine the direction of the steering angle
+          if(total_error < 0) steer_value = - steer_value;
           
+
+          // determine the throttle_value based on cte using speed_pid controller
+          speed_pid.UpdateError(cte);
+          double total_error_speed = pid.TotalError();
+          double coeff_throttle = 3.0;
+          throttle_value = 0.7 * exp(- coeff_throttle * fabs(total_error_speed));
+
+          std::cout << "Total Error: " << total_error;
           // DEBUG
-          std::cout << "CTE: " << cte << " Steering Value: " << steer_value 
+          std::cout << " CTE: " << cte << " Steering Value: " << steer_value 
                     << std::endl;
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
-          msgJson["throttle"] = 0.3;
+          msgJson["throttle"] = throttle_value;
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
