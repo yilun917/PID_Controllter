@@ -39,7 +39,7 @@ int main() {
    * TODO: Initialize the pid variable.
    */
   // P, I, D coefficients
-  double p = 0.20;
+  double p = 0.2;
   double i = 0.0;
   double d = 5.5;
   // initilize the PID controller;
@@ -82,19 +82,17 @@ int main() {
           // calculate the error
           pid.UpdateError(cte);
           double total_error = pid.TotalError();
+          // apply error to steering angle
           steer_value = -total_error;
-          // normalize the steering value based on totalError
-          //double coeff_steering = 0.2; 
-          //steer_value = -(1 - exp(-coeff_steering * fabs(total_error)));
-          // determine the direction of the steering angle
-          //if(total_error < 0) steer_value = - steer_value;
 
 
           // determine the throttle_value based on cte using speed_pid controller
           speed_pid.UpdateError(cte);
           double total_error_speed = speed_pid.TotalError();
-          double coeff_throttle = 0.5;
-          throttle_value = 0.65 * exp(- coeff_throttle * fabs(total_error_speed));
+          double coeff_throttle = 0.5;   // increase the effect of error
+          double throttle_limit = 0.65;  // limit the throttle to 0.65 at most
+          // use Sigmoid function to transfer from error to throttle value
+          throttle_value = throttle_limit * exp(- coeff_throttle * fabs(total_error_speed));
 
           std::cout << "Total Error: " << total_error;
           // DEBUG
