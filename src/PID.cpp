@@ -37,7 +37,7 @@ void PID::UpdateError(double cte) {
   // valvulate the 3 errprs
   p_error = Kp * cte;
   i_error = Ki * int_cte;
-  d_error = Ki * diff_cte;
+  d_error = Kd * diff_cte;
   
 
 }

@@ -39,9 +39,9 @@ int main() {
    * TODO: Initialize the pid variable.
    */
   // P, I, D coefficients
-  double p = 0.38;
+  double p = 0.20;
   double i = 0.0;
-  double d = 6.5;
+  double d = 5.5;
   // initilize the PID controller;
   pid.Init(p, i, d);
 
@@ -78,21 +78,23 @@ int main() {
            * NOTE: Feel free to play around with the throttle and speed.
            *   Maybe use another PID controller to control the speed!
            */
+          
           // calculate the error
           pid.UpdateError(cte);
           double total_error = pid.TotalError();
+          steer_value = -total_error;
           // normalize the steering value based on totalError
-          double coeff_steering = 0.2; 
-          steer_value = -(1 - exp(-coeff_steering * fabs(total_error)));
+          //double coeff_steering = 0.2; 
+          //steer_value = -(1 - exp(-coeff_steering * fabs(total_error)));
           // determine the direction of the steering angle
-          if(total_error < 0) steer_value = - steer_value;
-          
+          //if(total_error < 0) steer_value = - steer_value;
+
 
           // determine the throttle_value based on cte using speed_pid controller
           speed_pid.UpdateError(cte);
           double total_error_speed = speed_pid.TotalError();
-          double coeff_throttle = 1.0;
-          throttle_value = 0.7 * exp(- coeff_throttle * fabs(total_error_speed));
+          double coeff_throttle = 0.5;
+          throttle_value = 0.65 * exp(- coeff_throttle * fabs(total_error_speed));
 
           std::cout << "Total Error: " << total_error;
           // DEBUG
