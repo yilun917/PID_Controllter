@@ -37,6 +37,20 @@ Fellow students have put together a guide to Windows set-up for the project [her
 
 Tips for setting up your environment can be found [here](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/23d376c7-0195-4276-bdf0-e02f1f3c665d)
 
+## Gain Tunning Explained
+
+P gain is used to directly correct the error. I gain is used to correct the accumulated error, while D gain can help
+stablize the vehicle. The PID gains are set to be [0.2, 0, 5.5]. 
+Any smaller P will make the vehicle unable to successfully turn some corners. Larger P cases instability. The D is set by
+try and error(manual tunning), and turned out to be about 5.5. As to the I gain, due to the slow speed at the very beginning, even a small I gain could case the cte increase rapidly, thus, make the system instable. So, I is chosen to be 0.
+
+Beside the PD controller for steering, I also implemented a simple P controller for the throttle. In order for the controller to promptly control the vehicle, the P gain is set at a relatively high value of 1.5. Thus, in situation that corners, it will reduce the speed rapidly.
+
+With both the steering and throttle controller, the vehicle can drive safely at a relatively high speed. Sometime, the speed can reach 60mph. However, due to some unknown reason, the vehicle eventually becomes unstable after 5+ laps. Possibly because of the lack of I gain, the error will build up internally. But, for the purpose of this project, it should successfully satisfy the rubric.
+
+A demo can be found in the root of the directory.
+
+
 ## Editor Settings
 
 We've purposefully kept editor configuration files out of this repo in order to
