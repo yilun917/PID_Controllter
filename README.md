@@ -48,7 +48,7 @@ Beside the PD controller for steering, I also implemented a simple P controller 
 
 With both the steering and throttle controller, the vehicle can drive safely at a relatively high speed. Sometime, the speed can reach 60mph. However, due to some unknown reason, the vehicle eventually becomes unstable after 5+ laps. Possibly because of the lack of I gain, the error will build up internally. But, for the purpose of this project, it should successfully satisfy the rubric.
 
-A demo can be found in the root of the directory.
+A demo can be found in the root of the directory. [here](./PID_Controller_demo.mov)
 
 
 ## Editor Settings
