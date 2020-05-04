@@ -97,8 +97,7 @@ profile, you'd add:
 The README should explain what the profile does, how to take advantage of it,
 and how to install it.
 
-Frankly, I've never been involved in a project with multiple IDE profiles
-before. I believe the best way to handle this would be to keep them out of the
+I believe the best way to handle this would be to keep them out of the
 repo root to avoid clutter. My expectation is that most profiles will include
 instructions to copy files to a new location to get picked up by the IDE, but
 that's just a guess.
